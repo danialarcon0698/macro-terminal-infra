@@ -15,6 +15,9 @@ param(
 
 $ErrorActionPreference = "Stop"
 
+# Ensure PATH is up-to-date
+$env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
+
 # Configuration
 $AWS_REGION = "us-east-1"
 $PROJECT_NAME = "macro-terminal"
