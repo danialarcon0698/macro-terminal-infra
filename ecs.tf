@@ -72,6 +72,28 @@ resource "aws_iam_role" "ecs_task" {
   })
 }
 
+# Allow ECS Exec (SSM) for debugging and port forwarding
+resource "aws_iam_role_policy" "ecs_exec" {
+  name = "${var.project_name}-ecs-exec-policy"
+  role = aws_iam_role.ecs_task.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "ssmmessages:CreateControlChannel",
+          "ssmmessages:CreateDataChannel",
+          "ssmmessages:OpenControlChannel",
+          "ssmmessages:OpenDataChannel"
+        ]
+        Resource = "*"
+      }
+    ]
+  })
+}
+
 # ---- ECS Cluster ----
 resource "aws_ecs_cluster" "main" {
   name = "${var.project_name}-cluster"
@@ -164,11 +186,12 @@ resource "aws_ecs_task_definition" "api" {
 
 # ---- ECS Service ----
 resource "aws_ecs_service" "api" {
-  name            = "${var.project_name}-api"
-  cluster         = aws_ecs_cluster.main.id
-  task_definition = aws_ecs_task_definition.api.arn
-  desired_count   = var.api_desired_count
-  launch_type     = "FARGATE"
+  name                   = "${var.project_name}-api"
+  cluster                = aws_ecs_cluster.main.id
+  task_definition        = aws_ecs_task_definition.api.arn
+  desired_count          = var.api_desired_count
+  launch_type            = "FARGATE"
+  enable_execute_command = true
 
   network_configuration {
     subnets = [

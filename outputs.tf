@@ -47,6 +47,12 @@ output "rds_endpoint" {
   sensitive   = true
 }
 
+# ---- Bastion ----
+output "bastion_instance_id" {
+  description = "Bastion EC2 instance ID (for SSM tunnel)"
+  value       = aws_instance.bastion.id
+}
+
 # ---- ECS ----
 output "ecs_cluster_name" {
   description = "ECS cluster name"

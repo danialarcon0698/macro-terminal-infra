@@ -35,3 +35,6 @@ override.tf.json
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
+
+# DB tunnel PID file (created by db-connect.ps1)
+.db-tunnel-pid
