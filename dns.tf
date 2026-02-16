@@ -33,7 +33,40 @@ resource "aws_acm_certificate_validation" "api" {
   validation_record_fqdns = [for record in aws_route53_record.cert_validation : record.fqdn]
 }
 
-# ---- api.veridialy.com → API Gateway ----
+# ---- SendGrid Domain Authentication ----
+resource "aws_route53_record" "sendgrid_em" {
+  zone_id = data.aws_route53_zone.main.zone_id
+  name    = "em9234.${var.domain_name}"
+  type    = "CNAME"
+  ttl     = 300
+  records = ["u59905925.wl176.sendgrid.net"]
+}
+
+resource "aws_route53_record" "sendgrid_dkim1" {
+  zone_id = data.aws_route53_zone.main.zone_id
+  name    = "s1._domainkey.${var.domain_name}"
+  type    = "CNAME"
+  ttl     = 300
+  records = ["s1.domainkey.u59905925.wl176.sendgrid.net"]
+}
+
+resource "aws_route53_record" "sendgrid_dkim2" {
+  zone_id = data.aws_route53_zone.main.zone_id
+  name    = "s2._domainkey.${var.domain_name}"
+  type    = "CNAME"
+  ttl     = 300
+  records = ["s2.domainkey.u59905925.wl176.sendgrid.net"]
+}
+
+resource "aws_route53_record" "sendgrid_dmarc" {
+  zone_id = data.aws_route53_zone.main.zone_id
+  name    = "_dmarc.${var.domain_name}"
+  type    = "TXT"
+  ttl     = 300
+  records = ["v=DMARC1; p=none;"]
+}
+
+# ---- api.veridialy.com -> API Gateway ----
 resource "aws_route53_record" "api" {
   zone_id = data.aws_route53_zone.main.zone_id
   name    = "${var.api_subdomain}.${var.domain_name}"
