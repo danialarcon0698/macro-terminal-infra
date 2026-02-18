@@ -3,15 +3,14 @@
 # (t4g.nano ~$3/mo, stopped when not in use = pennies)
 # ============================================================
 
-# ---- Latest Amazon Linux 2023 ARM AMI (for Graviton t4g) ----
-# NOTE: Using the full AMI (not minimal) because it includes SSM agent
-data "aws_ami" "amazon_linux_2023" {
+# ---- Latest Amazon Linux 2 ARM AMI (SSM agent pre-installed) ----
+data "aws_ami" "amazon_linux_2" {
   most_recent = true
   owners      = ["amazon"]
 
   filter {
     name   = "name"
-    values = ["al2023-ami-2023*-kernel-*-arm64"]
+    values = ["amzn2-ami-hvm-*-arm64-gp2"]
   }
 
   filter {
@@ -79,7 +78,7 @@ resource "aws_security_group" "bastion" {
 
 # ---- EC2 Instance ----
 resource "aws_instance" "bastion" {
-  ami                    = data.aws_ami.amazon_linux_2023.id
+  ami                    = data.aws_ami.amazon_linux_2.id
   instance_type          = "t4g.nano"
   subnet_id              = aws_subnet.public_1.id
   iam_instance_profile   = aws_iam_instance_profile.bastion.name
@@ -87,6 +86,15 @@ resource "aws_instance" "bastion" {
 
   # No SSH key — access is via SSM only
   associate_public_ip_address = true # Needed for SSM agent to reach SSM service
+
+  # Ensure SSM agent is running on boot
+  user_data = base64encode(<<-EOF
+    #!/bin/bash
+    yum install -y amazon-ssm-agent
+    systemctl enable amazon-ssm-agent
+    systemctl start amazon-ssm-agent
+  EOF
+  )
 
   metadata_options {
     http_tokens   = "required" # IMDSv2 only (security best practice)

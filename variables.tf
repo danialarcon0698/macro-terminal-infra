@@ -137,22 +137,28 @@ variable "google_client_secret" {
   sensitive   = true
 }
 
-variable "paddle_api_key" {
-  description = "Paddle API key"
+variable "mp_access_token" {
+  description = "Mercado Pago access token"
   type        = string
   sensitive   = true
 }
 
-variable "paddle_webhook_secret" {
-  description = "Paddle webhook signing secret"
+variable "mp_webhook_secret" {
+  description = "Mercado Pago webhook signing secret"
   type        = string
   sensitive   = true
 }
 
-variable "paddle_api_base_url" {
-  description = "Paddle API base URL (sandbox or production)"
+variable "mp_api_base_url" {
+  description = "Mercado Pago API base URL"
   type        = string
-  default     = "https://api.paddle.com"
+  default     = "https://api.mercadopago.com"
+}
+
+variable "mp_plan_ids" {
+  description = "Comma-separated Mercado Pago preapproval_plan IDs"
+  type        = string
+  default     = ""
 }
 
 variable "frontend_url" {

@@ -139,8 +139,8 @@ resource "aws_ecs_task_definition" "api" {
         { name = "JWT_EXPIRATION_HOURS", value = var.jwt_expiration_hours },
         { name = "FROM_EMAIL", value = var.from_email },
         { name = "FRONTEND_URL", value = var.frontend_url },
-        { name = "PADDLE_API_BASE_URL", value = var.paddle_api_base_url },
-        { name = "PADDLE_FRONTEND_URL", value = var.frontend_url },
+        { name = "MP_API_BASE_URL", value = var.mp_api_base_url },
+        { name = "MP_PLAN_IDS", value = var.mp_plan_ids },
         { name = "GOOGLE_REDIRECT_URI", value = "https://${var.api_subdomain}.${var.domain_name}/api/auth/google/callback" },
         { name = "REFRESH_TOKEN_EXPIRATION_DAYS", value = var.refresh_token_expiration_days },
       ]
@@ -153,8 +153,8 @@ resource "aws_ecs_task_definition" "api" {
         { name = "RECAPTCHA_SECRET_KEY", valueFrom = "${aws_secretsmanager_secret.app_secrets.arn}:RECAPTCHA_SECRET_KEY::" },
         { name = "GOOGLE_CLIENT_ID", valueFrom = "${aws_secretsmanager_secret.app_secrets.arn}:GOOGLE_CLIENT_ID::" },
         { name = "GOOGLE_CLIENT_SECRET", valueFrom = "${aws_secretsmanager_secret.app_secrets.arn}:GOOGLE_CLIENT_SECRET::" },
-        { name = "PADDLE_API_KEY", valueFrom = "${aws_secretsmanager_secret.app_secrets.arn}:PADDLE_API_KEY::" },
-        { name = "PADDLE_WEBHOOK_SECRET", valueFrom = "${aws_secretsmanager_secret.app_secrets.arn}:PADDLE_WEBHOOK_SECRET::" },
+        { name = "MP_ACCESS_TOKEN", valueFrom = "${aws_secretsmanager_secret.app_secrets.arn}:MP_ACCESS_TOKEN::" },
+        { name = "MP_WEBHOOK_SECRET", valueFrom = "${aws_secretsmanager_secret.app_secrets.arn}:MP_WEBHOOK_SECRET::" },
         { name = "DISCORD_WEBHOOK_URL", valueFrom = "${aws_secretsmanager_secret.app_secrets.arn}:DISCORD_WEBHOOK_URL::" },
       ]
 
