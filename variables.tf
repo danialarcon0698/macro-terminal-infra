@@ -180,6 +180,12 @@ variable "refresh_token_expiration_days" {
   default     = "30"
 }
 
+variable "admin_secret" {
+  description = "Secret token for admin API endpoints"
+  type        = string
+  sensitive   = true
+}
+
 # ---- Data Provider ----
 variable "data_provider_cpu" {
   description = "Fargate task CPU units for data provider"

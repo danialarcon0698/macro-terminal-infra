@@ -24,6 +24,7 @@ resource "aws_secretsmanager_secret_version" "app_secrets" {
     MP_ACCESS_TOKEN      = var.mp_access_token
     MP_WEBHOOK_SECRET    = var.mp_webhook_secret
     DISCORD_WEBHOOK_URL   = var.discord_webhook_url
+    ADMIN_SECRET          = var.admin_secret
     DATABASE_URL         = "postgresql://${var.db_username}:${var.db_password}@${aws_db_instance.postgres.endpoint}/${var.db_name}"
 
     # Data provider secrets (shared DB credentials)

@@ -157,6 +157,7 @@ resource "aws_ecs_task_definition" "api" {
         { name = "MP_ACCESS_TOKEN", valueFrom = "${aws_secretsmanager_secret.app_secrets.arn}:MP_ACCESS_TOKEN::" },
         { name = "MP_WEBHOOK_SECRET", valueFrom = "${aws_secretsmanager_secret.app_secrets.arn}:MP_WEBHOOK_SECRET::" },
         { name = "DISCORD_WEBHOOK_URL", valueFrom = "${aws_secretsmanager_secret.app_secrets.arn}:DISCORD_WEBHOOK_URL::" },
+        { name = "ADMIN_SECRET", valueFrom = "${aws_secretsmanager_secret.app_secrets.arn}:ADMIN_SECRET::" },
       ]
 
       logConfiguration = {
