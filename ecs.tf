@@ -139,6 +139,7 @@ resource "aws_ecs_task_definition" "api" {
         { name = "JWT_EXPIRATION_HOURS", value = var.jwt_expiration_hours },
         { name = "FROM_EMAIL", value = var.from_email },
         { name = "FRONTEND_URL", value = var.frontend_url },
+        { name = "API_BASE_URL", value = "https://${var.api_subdomain}.${var.domain_name}" },
         { name = "MP_API_BASE_URL", value = var.mp_api_base_url },
         { name = "MP_PLAN_IDS", value = var.mp_plan_ids },
         { name = "GOOGLE_REDIRECT_URI", value = "https://${var.api_subdomain}.${var.domain_name}/api/auth/google/callback" },
