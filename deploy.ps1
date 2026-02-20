@@ -74,12 +74,20 @@ function Deploy-Frontend {
     Write-Host "`n=== Deploying Frontend ===" -ForegroundColor Green
     
     Push-Location "$REPOS_DIR\macro-terminal-app"
+    $env:VITE_API_URL = "https://api.veridialy.com/api"
     npm run build
     
     $BUCKET = terraform -chdir="$REPOS_DIR\macro-terminal-infra" output -raw frontend_bucket_name
     $CF_ID = terraform -chdir="$REPOS_DIR\macro-terminal-infra" output -raw cloudfront_distribution_id
     
-    aws s3 sync dist/ "s3://$BUCKET" --delete
+    # Upload hashed assets with long cache (immutable — filename changes on every build)
+    aws s3 sync dist/assets/ "s3://$BUCKET/assets/" --delete `
+        --cache-control "public, max-age=31536000, immutable"
+    
+    # Upload index.html with no-cache (browser must always revalidate)
+    aws s3 cp dist/index.html "s3://$BUCKET/index.html" `
+        --cache-control "no-cache, no-store, must-revalidate"
+    
     aws cloudfront create-invalidation --distribution-id $CF_ID --paths "/*" | Out-Null
     Pop-Location
     
