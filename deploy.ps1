@@ -60,13 +60,10 @@ function Deploy-Data {
     docker push "${ECR_BASE}/${PROJECT_NAME}-data-provider:latest"
     Pop-Location
     
-    aws ecs update-service `
-        --cluster "${PROJECT_NAME}-cluster" `
-        --service "${PROJECT_NAME}-data-provider" `
-        --force-new-deployment `
-        --region $AWS_REGION | Out-Null
-    
-    Write-Host "Data provider deploy initiated!" -ForegroundColor Green
+    Write-Host "Data provider image pushed." -ForegroundColor Green
+    Write-Host "This worker is scheduled by EventBridge (no always-on ECS service)." -ForegroundColor Yellow
+    Write-Host "To run immediately once, execute:" -ForegroundColor Cyan
+    Write-Host "aws ecs run-task --cluster ${PROJECT_NAME}-cluster --task-definition ${PROJECT_NAME}-data-provider --launch-type FARGATE --network-configuration <awsvpcConfiguration> --region $AWS_REGION" -ForegroundColor Gray
 }
 
 # ---- Deploy Frontend ----

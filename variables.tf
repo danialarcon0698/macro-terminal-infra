@@ -205,3 +205,9 @@ variable "data_provider_update_interval" {
   default     = "21600" # 6 hours
 }
 
+variable "data_provider_schedule_expression" {
+  description = "EventBridge schedule expression for data provider task"
+  type        = string
+  default     = "rate(6 hours)"
+}
+

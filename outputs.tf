@@ -64,7 +64,7 @@ output "ecs_api_service_name" {
   value       = aws_ecs_service.api.name
 }
 
-output "ecs_data_provider_service_name" {
-  description = "ECS data provider service name"
-  value       = aws_ecs_service.data_provider.name
+output "ecs_data_provider_schedule_name" {
+  description = "EventBridge rule name for scheduled data provider task"
+  value       = aws_cloudwatch_event_rule.data_provider_schedule.name
 }
