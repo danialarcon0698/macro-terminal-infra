@@ -1,7 +1,9 @@
 # ============================================================
 # DB Connect - SSM tunnel to private RDS via Bastion
 # Usage: .\db-connect.ps1
-# Connects DBeaver to localhost:5432 -> RDS (fully private)
+# NOTE: Bastion was removed from this infra. This script is deprecated.
+# To access RDS locally, use a different method (e.g. temporary
+# public access, or run a one-off EC2/ECS task with port forward).
 # ============================================================
 
 $ErrorActionPreference = "Stop"
@@ -35,12 +37,13 @@ if (-not $ssmPlugin -or $ssmPlugin -match "not recognized") {
 }
 Write-Host "Prerequisites OK" -ForegroundColor Green
 
-# ---- Get Bastion Instance ID ----
+# ---- Get Bastion Instance ID (removed from infra) ----
 Write-Host "`n=== Getting Bastion instance ===" -ForegroundColor Cyan
 $INSTANCE_ID = terraform output -raw bastion_instance_id 2>$null
 if (-not $INSTANCE_ID) {
-    Write-Host "ERROR: Could not get bastion instance ID from Terraform outputs." -ForegroundColor Red
-    Write-Host "Run 'terraform apply' first." -ForegroundColor Yellow
+    Write-Host "ERROR: Bastion was removed from this infrastructure." -ForegroundColor Red
+    Write-Host "RDS is only reachable from within the VPC (API and data-provider)." -ForegroundColor Yellow
+    Write-Host "To access RDS locally, use another method (e.g. temporary public access, or a one-off tunnel task)." -ForegroundColor Yellow
     exit 1
 }
 Write-Host "Bastion: $INSTANCE_ID" -ForegroundColor Yellow
