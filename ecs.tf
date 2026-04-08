@@ -215,6 +215,9 @@ resource "aws_ecs_service" "api" {
   deployment_minimum_healthy_percent = 50
   deployment_maximum_percent         = 200
 
+  # So Fargate task usage inherits Project / Environment in Cost Explorer
+  propagate_tags = "SERVICE"
+
   tags = {
     Name = "${var.project_name}-api-service"
   }

@@ -23,6 +23,8 @@ terraform {
 provider "aws" {
   region = var.aws_region
 
+  # Cost Explorer: AWS Console → Billing → Cost allocation tags → activate
+  # "Project" (and optionally "Environment") so usage breaks down by tag.
   default_tags {
     tags = {
       Project     = var.project_name
